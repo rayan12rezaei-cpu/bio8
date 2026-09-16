@@ -1,0 +1,303 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>زیست‌شناسی علوم هشتم | تعاملی</title>
+<style>
+@font-face{
+  font-family:'Vazirmatn';
+  src:url('./Vazirmatn.ttf') format('truetype');
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+500;600;700;800&display=swap");
+*{box-sizing:border-box}
+body{margin:0;font-family:'Vazirmatn',Tahoma,Arial,sans-serif;background:#f4f8f6;color:#17352b;line-height:1.8}
+header{background:linear-gradient(135deg,#116b4b,#1b9a69);color:#fff;padding:28px 18px;text-align:center;box-shadow:0 4px 18px #0002}
+header h1{margin:0 0 6px;font-size:clamp(25px,5vw,38px)}
+header p{margin:0;opacity:.92}
+.creator-credit{margin-top:8px;font-size:13px;font-weight:600;opacity:.9}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:12px;background:#fff;position:sticky;top:0;z-index:20;box-shadow:0 2px 10px #0001}
+nav button,.btn{border:0;border-radius:12px;padding:10px 15px;background:#e4f3ed;color:#126344;font-weight:700;cursor:pointer}
+nav button.active,.btn.primary{background:#15835a;color:#fff}
+main{max-width:1100px;margin:auto;padding:22px 14px 50px}
+.section{display:none}.section.active{display:block}
+.hero,.card,.chapter,.sim-panel{background:#fff;border-radius:20px;padding:22px;margin-bottom:18px;box-shadow:0 7px 25px #0000000d;border:1px solid #e1eee9}
+.hero{text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.chapter{cursor:pointer;transition:.2s}.chapter:hover{transform:translateY(-2px);box-shadow:0 10px 28px #0002}
+.chapter h3{margin-top:0;color:#116b4b}
+.chapter .controls{justify-content:flex-start}.chapter-option{font-size:14px}
+h2{color:#116b4b;margin-top:4px}
+h3{color:#167454}
+ul{padding-right:22px}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:center;justify-content:center;padding:18px;z-index:100}
+.modal.show{display:flex}
+.modal-box{background:#fff;max-width:650px;width:100%;border-radius:20px;padding:24px;box-shadow:0 20px 60px #0004;position:relative}
+.close{position:absolute;left:14px;top:10px;border:0;background:#edf5f2;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:20px}
+.tip{display:none}.tip.show{display:block}
+.flash{min-height:220px;display:flex;align-items:center;justify-content:center;text-align:center;background:#eef8f3;border-radius:18px;padding:28px;font-size:21px;font-weight:700}
+.card-chapter{display:inline-block;margin:12px auto 10px;padding:5px 12px;border-radius:9px;background:#e4f3ed;color:#126344;font-size:13px;font-weight:700;border:1px solid #cce6dc}.card-chapter{display:block;margin:0 0 10px;padding:0;background:transparent;color:#126344;font-size:13px;font-weight:700;box-shadow:none;border:0}
+.answer{margin-top:18px;padding:15px;border-right:5px solid #15835a;background:#f4faf7;border-radius:10px;display:none}
+.answer.show{display:block}
+.controls{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.cell-stage{display:flex;align-items:center;justify-content:center;min-height:450px;background:#f8fcfa;border-radius:20px}
+.cell{position:relative;width:min(390px,92vw);aspect-ratio:1/1;margin:15px auto;border-radius:50%;background:#dff5e9;border:5px solid #15835a;box-shadow:inset 0 0 0 12px #ffffffaa,0 12px 35px #00000012;overflow:hidden}
+.cell.plant{border-radius:24%;background:#e7f7df}
+.wall{position:absolute;inset:8px;border:3px solid #76a85c;border-radius:inherit;pointer-events:none}
+.part{position:absolute;z-index:3;cursor:pointer;border:0}
+.nucleus{width:82px;height:82px;border-radius:50%;background:#b7a2e8;border:3px solid #6d58aa}
+.cell.plant .nucleus{left:65px;top:158px}.cell.animal .nucleus{left:154px;top:154px}
+.mito{width:46px;height:26px;border-radius:50%;background:#f5b46d;border:3px solid #b86d25}
+.m1{left:92px;top:78px}.m2{left:82px;top:278px}.m3{right:92px;top:78px}.m4{right:82px;top:278px}
+.golgi{width:62px;height:34px;left:90px;top:306px;border-radius:50%;background:#f2b7c8;border:3px solid #a85a73}
+.rib{width:13px;height:13px;border-radius:50%;background:#805c9f;border:2px solid #543b6d}
+.r1{left:132px;top:145px}.r2{left:190px;top:130px}.r3{left:240px;top:145px}
+.chl{width:34px;height:48px;border-radius:48%;background:#8ed17a;border:3px solid #4b9341}
+.chl.c1{left:58px;top:112px}.chl.c2{right:58px;top:112px}.chl.c3{left:58px;bottom:58px}.chl.c4{right:58px;bottom:58px}
+.plant-vacuole{display:block;width:112px;height:112px;left:205px;top:157px;border-radius:50%;background:#8ed6e8aa;border:4px solid #5caabd}
+.animal-vacuole{display:none;width:25px;height:25px;border-radius:50%;background:#8ed6e8aa;border:2px solid #5caabd}
+.av1{left:105px;top:110px}.av2{right:105px;top:110px}.av3{left:110px;bottom:108px}
+.cell.animal .chl,.cell.animal .plant-vacuole{display:none}
+.cell.animal .animal-vacuole{display:block}
+.er-svg{position:absolute;width:120px;height:90px;left:135px;top:40px;z-index:2;pointer-events:auto}
+.er-svg path{stroke:#4c86bb;stroke-width:7;stroke-linecap:round;fill:none}
+.er-svg circle{fill:#555}
+.part-label{font-size:14px;color:#315}
+#partInfo{min-height:180px}
+select{padding:10px;border-radius:10px;border:1px solid #bdd6cc;background:#fff;font:inherit}
+@media(max-width:760px){
+.sim-grid{grid-template-columns:1fr}.cell-stage{min-height:360px}.cell{width:310px}
+.cell .nucleus{width:72px;height:72px}.cell.plant .nucleus{left:48px;top:123px}.cell.animal .nucleus{left:119px;top:119px}
+.mito{width:40px;height:23px}.m1{left:68px;top:62px}.m2{left:62px;top:218px}.m3{right:68px;top:62px}.m4{right:62px;top:218px}
+.golgi{left:66px;top:238px}.er-svg{width:98px;height:73px;left:106px;top:26px}
+.plant-vacuole{width:88px;height:88px;left:163px;top:125px}
+.av1{left:78px;top:73px}.av2{right:78px;top:73px}.av3{left:82px;bottom:68px}
+.r1{left:96px;top:105px}.r2{left:145px;top:98px}.r3{left:194px;top:105px}
+.chl.c1{left:39px;top:94px}.chl.c2{right:39px;top:94px}.chl.c3{left:39px;bottom:38px}.chl.c4{right:39px;bottom:38px}
+}
+
+html,body,*{
+  font-family:'Vazirmatn',Tahoma,Arial,sans-serif !important;
+}
+button,input,select,textarea{
+  font-family:'Vazirmatn',Tahoma,Arial,sans-serif !important;
+}
+
+</style>
+</head>
+<body>
+<header>
+<h1>زیست‌شناسی علوم هشتم</h1>
+<p>یادگیری تعاملی، مرور مفهومی و شبیه‌ساز سلول</p>
+<div class="creator-credit">ساخته شده توسط رایان رضائی</div>
+</header>
+
+<nav>
+<button data-tab="home" class="active">خانه</button>
+<button data-tab="chapters">فصل‌های زیست هشتم</button>
+<button data-tab="sim">شبیه‌ساز سلول</button>
+<button data-tab="cards">کارت‌های مرور</button>
+</nav>
+
+<main>
+<section id="home" class="section active">
+<div class="hero"><h2>به زیست هشتم خوش آمدید 🌱</h2><p>فصل موردنظر را انتخاب کنید یا با کارت‌های مرور، مفاهیم مهم را تمرین کنید.</p></div>
+<div class="grid">
+<div class="chapter" data-open="chapters"><h3>فصل‌های زیست هشتم</h3><p>پنج فصل را به صورت کارت‌های کوتاه و تعاملی مرور کن.</p></div>
+<div class="chapter" data-open="sim"><h3>شبیه‌ساز سلول</h3><p>روی اندامک‌ها کلیک کن و توضیحشان را ببین.</p></div>
+</div>
+</section>
+
+<section id="chapters" class="section">
+<div class="hero">
+  <h2>فصل‌های زیست هشتم</h2>
+  <p>هر فصل را انتخاب کن؛ ابتدا نکته‌های کوتاه را ببین و با انتخاب هر گزینه، توضیح کامل‌تر در یک پنجرهٔ وسط صفحه نمایش داده می‌شود.</p>
+</div>
+<div class="grid" id="chapterCards"></div>
+</section>
+
+<section id="cards" class="section">
+<div class="card">
+<h2>کارت‌های مرور مفهومی</h2>
+<p>۱۵ سؤال؛ از هر فصل ۳ سؤال. ابتدا سؤال را بخوان، سپس پاسخ را بررسی کن.</p>
+<div class="card-chapter" id="cardChapter"></div>
+<div class="card-chapter" id="cardChapter"></div>
+<div class="flash" id="question"></div>
+<div class="answer" id="answer"></div>
+<div class="controls">
+<button class="btn primary" id="flip">نمایش پاسخ</button>
+<button class="btn" id="prev">کارت قبلی</button>
+<button class="btn" id="next">کارت بعدی</button>
+</div>
+<p id="counter" style="text-align:center"></p>
+</div>
+</section>
+
+<section id="sim" class="section">
+<div class="sim-panel">
+<h2>شبیه‌ساز سلول</h2>
+<p>نوع سلول را انتخاب کن و روی اجزای مختلف کلیک کن.</p>
+<select id="cellType"><option value="plant">سلول گیاهی</option><option value="animal">سلول جانوری</option></select>
+<div class="sim-grid">
+<div class="cell-stage">
+<div id="cell" class="cell plant">
+<div class="wall"></div>
+<svg class="er-svg" viewBox="0 0 180 130" aria-label="شبکه آندوپلاسمی">
+<path d="M20 108 Q90 25 160 108"/><path d="M42 108 Q90 50 138 108"/><path d="M64 108 Q90 75 116 108"/>
+<circle cx="34" cy="91" r="4"/><circle cx="50" cy="72" r="4"/><circle cx="68" cy="57" r="4"/><circle cx="112" cy="57" r="4"/><circle cx="130" cy="72" r="4"/><circle cx="146" cy="91" r="4"/>
+</svg>
+<button class="part nucleus" data-part="هسته"></button>
+<button class="part mito m1" data-part="میتوکندری (راکیزه)"></button><button class="part mito m2" data-part="میتوکندری (راکیزه)"></button><button class="part mito m3" data-part="میتوکندری (راکیزه)"></button><button class="part mito m4" data-part="میتوکندری (راکیزه)"></button>
+<button class="part golgi" data-part="جسم گلژی"></button>
+<button class="part rib r1" data-part="ریبوزوم (رِناتَن)"></button><button class="part rib r2" data-part="ریبوزوم (رِناتَن)"></button><button class="part rib r3" data-part="ریبوزوم (رِناتَن)"></button>
+<button class="part plant-vacuole" data-part="واکوئل مرکزی (کریچه)"></button>
+<button class="part animal-vacuole av1" data-part="واکوئل (کریچه)"></button><button class="part animal-vacuole av2" data-part="واکوئل (کریچه)"></button><button class="part animal-vacuole av3" data-part="واکوئل (کریچه)"></button>
+<button class="part chl c1" data-part="کلروپلاست"></button><button class="part chl c2" data-part="کلروپلاست"></button><button class="part chl c3" data-part="کلروپلاست"></button><button class="part chl c4" data-part="کلروپلاست"></button>
+</div></div>
+<div class="card" id="partInfo"><h3>راهنمای اجزای سلول</h3><p>برای دیدن توضیح، روی یک جزء کلیک کن.</p></div>
+</div>
+</div>
+</section>
+</main>
+
+<div class="modal" id="tipModal"><div class="modal-box"><button class="close" id="closeModal">×</button><h2 id="modalTitle"></h2><p id="modalText"></p></div></div>
+
+<script>
+const tabs=document.querySelectorAll('nav button[data-tab]');
+const sections=document.querySelectorAll('.section');
+function go(id){
+ sections.forEach(s=>s.classList.toggle('active',s.id===id));
+ tabs.forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+tabs.forEach(b=>b.addEventListener('click',()=>go(b.dataset.tab)));
+document.querySelectorAll('[data-open]').forEach(x=>x.addEventListener('click',()=>go(x.dataset.open)));
+
+
+const chapterData=[
+{
+ title:"فصل ۴ | تنظیم عصبی",
+ short:"چگونه بدن پیام‌ها را دریافت و برای پاسخ مناسب هماهنگ می‌کند؟",
+ options:[
+  ["نورون و پیام عصبی","نورون یاختهٔ اصلی دستگاه عصبی است. دندریت‌ها پیام را دریافت می‌کنند و آکسون در انتقال پیام عصبی نقش دارد. ارتباط نورون‌ها باعث می‌شود اطلاعات در بدن جابه‌جا و پردازش شوند."],
+  ["دستگاه عصبی مرکزی","مغز و نخاع بخش اصلی دستگاه عصبی مرکزی‌اند. این بخش‌ها اطلاعات دریافت‌شده را پردازش می‌کنند و در هماهنگی بسیاری از پاسخ‌های بدن نقش دارند."],
+  ["انعکاس","بعضی پاسخ‌ها بسیار سریع و غیرارادی‌اند. در این پاسخ‌ها مسیر عصبی کوتاه‌تر و هماهنگی آن به‌گونه‌ای است که بدن بتواند بدون تأخیر زیاد واکنش نشان دهد."]
+ ]
+},
+{
+ title:"فصل ۵ | حس و حرکت",
+ short:"چگونه تغییرات محیط را حس می‌کنیم و بدن را حرکت می‌دهیم؟",
+ options:[
+  ["اندام‌های حسی","گیرنده‌های حسی تغییرات مناسب محیط را دریافت می‌کنند و اطلاعات را به دستگاه عصبی می‌رسانند. چشم، گوش، پوست، بینی و زبان هرکدام گیرنده‌های تخصصی دارند."],
+  ["استخوان و مفصل","استخوان‌ها به بدن شکل و تکیه‌گاه می‌دهند و از بعضی اندام‌ها محافظت می‌کنند. مفصل محل ارتباط استخوان‌هاست و در بسیاری از بخش‌ها امکان حرکت را فراهم می‌کند."],
+  ["ماهیچه و حرکت","ماهیچه با انقباض نیرو ایجاد می‌کند و با کشیدن استخوان‌ها، همراه با مفصل‌ها باعث حرکت اندام می‌شود. حرکت طبیعی نتیجهٔ هماهنگی دستگاه عصبی و دستگاه حرکتی است."]
+ ]
+},
+{
+ title:"فصل ۶ | تنظیم هورمونی",
+ short:"هورمون‌ها چگونه فعالیت‌های بدن را هماهنگ می‌کنند؟",
+ options:[
+  ["هورمون چیست؟","هورمون ماده‌ای شیمیایی است که از غدد درون‌ریز ترشح می‌شود و از راه خون به سلول‌های هدف می‌رسد. هورمون‌ها در تنظیم فعالیت‌های گوناگون بدن نقش دارند."],
+  ["سلول هدف","هر هورمون روی سلول‌هایی اثر می‌گذارد که گیرندهٔ مناسب آن را داشته باشند. بنابراین وجود گیرنده یکی از عوامل مهم در پاسخ سلول به هورمون است."],
+  ["عصبی و هورمونی","تنظیم عصبی معمولاً سریع‌تر است و پیام را در مسیرهای عصبی منتقل می‌کند. تنظیم هورمونی از راه مواد شیمیایی در خون انجام می‌شود و بسیاری از اثرهای آن دیرتر و ماندگارترند."]
+ ]
+},
+{
+ title:"فصل ۷ | الفبای زیست‌فناوری",
+ short:"چگونه از جانداران و فرایندهای زیستی برای رفع نیازهای انسان استفاده می‌کنیم؟",
+ options:[
+  ["زیست‌فناوری","زیست‌فناوری استفادهٔ هدفمند از جانداران، سلول‌ها یا فرایندهای زیستی برای تولید محصول یا انجام یک کار مفید است. این دانش در زندگی روزمره و صنایع کاربردهای زیادی دارد."],
+  ["میکروب‌ها","برخی میکروب‌ها می‌توانند در فرایندهای تولید مواد غذایی و صنعتی مفید باشند. ویژگی‌های زیستی آنها در شرایط مناسب می‌تواند برای تولید محصول مورد استفاده قرار گیرد."],
+  ["کاربردهای زیست‌فناوری","زیست‌فناوری فقط یک کاربرد ندارد و در زمینه‌هایی مانند پزشکی، کشاورزی، صنایع غذایی و محیط‌زیست به کار می‌رود. شناخت سازوکارهای زیستی پایهٔ این کاربردهاست."]
+ ]
+},
+{
+ title:"فصل ۸ | تولیدمثل در جانداران",
+ short:"چرا و چگونه جانداران نسل خود را ادامه می‌دهند؟",
+ options:[
+  ["تولیدمثل غیرجنسی","در تولیدمثل غیرجنسی معمولاً یک والد در ایجاد فرد جدید نقش دارد. به همین دلیل فرزندان معمولاً شباهت ژنتیکی زیادی با والد دارند."],
+  ["تولیدمثل جنسی","در تولیدمثل جنسی یاخته‌های جنسی و ترکیب اطلاعات ژنتیکی والدین در ایجاد فرزند نقش دارند. این فرایند می‌تواند باعث ایجاد تفاوت‌هایی میان فرزندان شود."],
+  ["اهمیت تولیدمثل","تولیدمثل باعث ایجاد افراد جدید و ادامهٔ نسل یک جاندار می‌شود. بدون تولیدمثل، جمعیت یک گونه با گذشت زمان نمی‌تواند نسل‌های جدید داشته باشد."]
+ ]
+}];
+
+const chapterCards=document.getElementById('chapterCards');
+const tipModal=document.getElementById('tipModal');
+const modalTitle=document.getElementById('modalTitle');
+const modalText=document.getElementById('modalText');
+function showChapterInfo(title,text){
+  modalTitle.textContent=title;
+  modalText.textContent=text;
+  tipModal.classList.add('show');
+}
+function renderChapterCards(){
+  chapterCards.innerHTML=chapterData.map((ch,i)=>`
+    <div class="chapter">
+      <h3>${ch.title}</h3>
+      <p>${ch.short}</p>
+      <div class="controls">
+        ${ch.options.map((op,j)=>`<button class="btn chapter-option" data-c="${i}" data-o="${j}">${op[0]}</button>`).join('')}
+      </div>
+    </div>`).join('');
+  chapterCards.querySelectorAll('.chapter-option').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const ch=chapterData[+btn.dataset.c], op=ch.options[+btn.dataset.o];
+      showChapterInfo(op[0],op[1]);
+    });
+  });
+}
+renderChapterCards();
+document.getElementById('closeModal').addEventListener('click',()=>tipModal.classList.remove('show'));
+tipModal.addEventListener('click',e=>{if(e.target===tipModal)tipModal.classList.remove('show')});
+const cards=[
+["فصل ۴ — تنظیم عصبی","چرا وقتی دستمان به جسم داغ نزدیک می‌شود، پاسخ سریع بدن برای دور کردن دست اهمیت دارد؟","زیرا در چنین موقعیتی سرعت پاسخ مهم است و مسیرهای عصبی می‌توانند پیام را سریع منتقل کنند تا بدن زودتر واکنش نشان دهد."],
+["فصل ۴ — تنظیم عصبی","اگر ارتباط مغز با بخشی از بدن مختل شود، چرا ممکن است حس یا حرکت آن بخش دچار مشکل شود؟","چون ارتباط عصبی برای رفت‌وآمد پیام‌های حسی و حرکتی ضروری است؛ اختلال در این ارتباط می‌تواند انتقال پیام را کاهش یا متوقف کند."],
+["فصل ۴ — تنظیم عصبی","چرا دستگاه عصبی فقط پیام دریافت نمی‌کند و باید پیام‌ها را پردازش هم بکند؟","زیرا دریافت اطلاعات به‌تنهایی کافی نیست؛ مغز و دیگر بخش‌های دستگاه عصبی باید اطلاعات را تفسیر و پاسخ مناسب را هماهنگ کنند."],
+["فصل ۵ — حس و حرکت","چرا برای حرکت مؤثر، همکاری استخوان‌ها و ماهیچه‌ها لازم است؟","ماهیچه‌ها نیرو ایجاد می‌کنند و استخوان‌ها با مفصل‌ها مانند اهرم عمل می‌کنند؛ بنابراین حرکت نتیجه همکاری این دو دستگاه است."],
+["فصل ۵ — حس و حرکت","چرا چشم و پوست هر دو اندام حسی‌اند، اما محرک‌های متفاوتی را دریافت می‌کنند؟","چون گیرنده‌های حسی تخصصی‌اند و هر نوع گیرنده به محرک مناسب خود پاسخ می‌دهد."],
+["فصل ۵ — حس و حرکت","چرا وجود مفصل در بعضی محل‌های بدن برای حرکت اهمیت دارد؟","چون مفصل امکان حرکت نسبی استخوان‌ها نسبت به یکدیگر را فراهم می‌کند و دامنه حرکت اندام را افزایش می‌دهد."],
+["فصل ۶ — تنظیم هورمونی","چرا یک هورمون روی همه سلول‌های بدن به یک شکل اثر نمی‌گذارد؟","زیرا اثر هورمون به وجود گیرنده مناسب در سلول هدف وابسته است؛ سلولی که گیرنده مناسب ندارد معمولاً پاسخ ویژه‌ای به آن هورمون نمی‌دهد."],
+["فصل ۶ — تنظیم هورمونی","چرا اثر تنظیم هورمونی معمولاً دیرتر از پیام عصبی ظاهر می‌شود؟","هورمون‌ها پس از ترشح وارد خون می‌شوند و به سلول هدف می‌رسند، در حالی که پیام عصبی مسیر اختصاصی و بسیار سریعی دارد."],
+["فصل ۶ — تنظیم هورمونی","چرا تنظیم قند خون نمونه‌ای از حفظ تعادل درونی بدن است؟","زیرا بدن تلاش می‌کند مقدار قند خون را در محدوده مناسب نگه دارد تا سلول‌ها انرژی کافی داشته باشند و شرایط داخلی بدن پایدار بماند."],
+["فصل ۷ — زیست‌فناوری","چرا از بعضی جانداران یا میکروب‌ها در تولید مواد غذایی استفاده می‌شود؟","زیرا فعالیت‌های زیستی آنها می‌تواند مواد خام را به محصولات موردنیاز انسان تبدیل کند؛ مانند فرایندهایی که در تهیه برخی مواد غذایی رخ می‌دهند."],
+["فصل ۷ — زیست‌فناوری","چرا شناخت ویژگی‌های جانداران می‌تواند به ساخت فناوری‌های مفید کمک کند؟","چون زیست‌فناوری از توانایی‌ها و فرایندهای طبیعی سلول‌ها و جانداران برای حل مسئله یا تولید محصول استفاده می‌کند."],
+["فصل ۷ — زیست‌فناوری","چرا زیست‌فناوری فقط به پزشکی محدود نمی‌شود؟","چون کاربردهای زیستی در حوزه‌هایی مانند کشاورزی، صنایع غذایی، محیط‌زیست و تولید مواد مختلف نیز وجود دارند."],
+["فصل ۸ — تولیدمثل","چرا تولیدمثل برای بقای یک گونه اهمیت دارد؟","چون با تولید افراد جدید، نسل یک گونه ادامه پیدا می‌کند و جمعیت آن می‌تواند در طول زمان باقی بماند."],
+["فصل ۸ — تولیدمثل","چرا تولیدمثل جنسی معمولاً می‌تواند تنوع بیشتری در فرزندان ایجاد کند؟","زیرا اطلاعات ژنتیکی دو والد در فرزند ترکیب می‌شود و ترکیب‌های جدیدی از ویژگی‌ها می‌تواند ایجاد شود."],
+["فصل ۸ — تولیدمثل","در تولیدمثل غیرجنسی چرا فرزند معمولاً شباهت زیادی به والد دارد؟","زیرا معمولاً یک والد در تولیدمثل شرکت دارد و فرزند اطلاعات ژنتیکی را عمدتاً از همان والد دریافت می‌کند."]
+];
+let idx=0,flipped=false;
+const q=document.getElementById('question'),a=document.getElementById('answer'),flip=document.getElementById('flip'),counter=document.getElementById('counter'),cardChapter=document.getElementById('cardChapter');
+function renderCard(){cardChapter.textContent=cards[idx][0];q.textContent=cards[idx][1];a.textContent=cards[idx][2];a.classList.toggle('show',flipped);flip.textContent=flipped?'نمایش پرسش':'نمایش پاسخ';counter.textContent=`کارت ${idx+1} از ${cards.length}`;}
+flip.addEventListener('click',()=>{flipped=!flipped;renderCard()});
+document.getElementById('prev').addEventListener('click',()=>{idx=(idx-1+cards.length)%cards.length;flipped=false;renderCard()});
+document.getElementById('next').addEventListener('click',()=>{idx=(idx+1)%cards.length;flipped=false;renderCard()});
+renderCard();
+
+const info={
+"هسته":"هسته مرکز کنترل بسیاری از فعالیت‌های سلول است و ماده ژنتیکی را در خود جای می‌دهد. در سلول‌های یوکاریوتی، هسته با پوشش هسته‌ای از سیتوپلاسم جداست. اطلاعات ژنتیکی برای ساخت پروتئین‌ها و تنظیم فعالیت سلول اهمیت دارد.",
+"میتوکندری (راکیزه)":"میتوکندری محل مهمی برای آزادسازی انرژی قابل استفاده سلول از مواد غذایی است. در آن واکنش‌های تنفسی سلولی انجام می‌شود. سلول‌هایی که فعالیت بیشتری دارند معمولاً به انرژی بیشتری نیاز دارند.",
+"جسم گلژی":"جسم گلژی در تغییر، مرتب‌سازی و بسته‌بندی بعضی مواد سلولی نقش دارد. این مواد می‌توانند برای بخش‌های مختلف سلول آماده شوند. کیسه‌های غشایی گلژی در این فرایندها نقش دارند.",
+"شبکه آندوپلاسمی (شبکه درمیان یاخته‌ای)":"شبکه آندوپلاسمی شبکه‌ای از غشاهای درون سلول است. نوع زبر آن با ریبوزوم‌ها در ساخت و جابه‌جایی بعضی پروتئین‌ها ارتباط دارد. این شبکه همچنین در جابه‌جایی مواد درون سلول نقش دارد.",
+"ریبوزوم (رِناتَن)":"ریبوزوم محل ساخت پروتئین‌هاست. ریبوزوم‌ها می‌توانند آزادانه در سیتوپلاسم یا متصل به شبکه آندوپلاسمی زبر باشند. پروتئین‌های ساخته‌شده وظایف گوناگونی در سلول دارند.",
+"واکوئل مرکزی (کریچه)":"واکوئل مرکزی در سلول گیاهی فضای بزرگی را دربر می‌گیرد و می‌تواند آب و مواد محلول مختلف را در خود نگه دارد. وجود آن به حفظ وضعیت مناسب آب در سلول کمک می‌کند. بزرگ بودن واکوئل باعث می‌شود سیتوپلاسم و هسته به سمت کناره‌تر سلول قرار گیرند.",
+"واکوئل (کریچه)":"در سلول جانوری واکوئل‌ها معمولاً کوچک‌تر و متعددتر از واکوئل مرکزی سلول گیاهی‌اند. آنها می‌توانند در نگهداری یا جابه‌جایی بعضی مواد نقش داشته باشند. شکل و تعداد آنها به نوع سلول نیز وابسته است.",
+"کلروپلاست":"کلروپلاست در سلول‌های گیاهی محل اصلی فتوسنتز است. رنگدانه سبز کلروفیل در آن نور را جذب می‌کند. انرژی نورانی در فرایند فتوسنتز برای ساخت مواد آلی به کار می‌رود."
+};
+document.querySelectorAll('.part,.er-svg').forEach(el=>{
+ el.addEventListener('click',e=>{
+   const name=el.dataset.part || "شبکه آندوپلاسمی (شبکه درمیان یاخته‌ای)";
+   document.getElementById('partInfo').innerHTML='<h3>'+name+'</h3><p>'+info[name]+'</p>';
+   e.stopPropagation();
+ });
+});
+document.getElementById('cellType').addEventListener('change',e=>{
+ document.getElementById('cell').className='cell '+e.target.value;
+});
+</script>
+</body>
+</html>
